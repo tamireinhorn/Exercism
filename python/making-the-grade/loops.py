@@ -50,10 +50,7 @@ def student_ranking(student_scores, student_names):
      :param student_names: list of names in descending order by exam score.
      :return: list of strings in format ["<rank>. <student name>: <score>"].
      """
-    ranking = []
-    for index, element in enumerate(student_scores):
-        ranking.append(str(index+1) + '. ' + student_names[index] + ': ' + str(element))
-        
+    ranking = [str(index+1) + '. ' + student_names[index] + ': ' + str(element)  for index, element in enumerate(student_scores)]
     return ranking
 
 
@@ -65,4 +62,4 @@ def perfect_score(student_info):
     for pair in student_info:
         if pair[1] == 100:
             return pair
-    return 'No perfect score.'
+    return []
