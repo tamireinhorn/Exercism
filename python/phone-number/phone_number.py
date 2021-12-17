@@ -5,8 +5,10 @@ from copy import copy
 class PhoneNumber:
     def __init__(self, number):
         number = str(number)
-        if re.match('[a-z]', number):
+        if re.search('[a-z]', number):
             raise ValueError('letters not permitted')
+        if re.search('\:|@|!', number):
+            raise ValueError('punctuations not permitted')
         number  = re.sub('\(|\)|\+|-|\s|\.|[a-z]', '', number)
         digits = len(number)
         try:
