@@ -10,25 +10,8 @@ those constants (ex. the constants in the os, subprocess and re modules).
 
 You can learn more here: https://en.wikipedia.org/wiki/Enumerated_type
 """
-
-
-# Score categories.
-# Change the values as you see fit.
 from collections import Counter
 
-YACHT = 0
-ONES = 1
-TWOS = 2
-THREES = 3
-FOURS = 4
-FIVES = 5
-SIXES = 6
-FULL_HOUSE = 7
-FOUR_OF_A_KIND = 8
-LITTLE_STRAIGHT = 9
-BIG_STRAIGHT = 10
-CHOICE = 11
-DEFAULT_SCORE = 0
 
 def _yacht_score(dice):
     if len(set(dice)) == 1:
@@ -39,7 +22,7 @@ def _yacht_score(dice):
 
 def _singles_score(dice, category):
     c = Counter(dice)
-    return category * c.get(category, 0) 
+    return category * c.get(category, 0)
 
 
 def _full_house_score(dice):
@@ -99,4 +82,18 @@ def score(dice, category):
     if category == CHOICE:
         return _choice_score(dice)
     raise ValueError('There is no such category')
-    
+
+
+YACHT = _yacht_score
+ONES = 1
+TWOS = 2
+THREES = 3
+FOURS = 4
+FIVES = 5
+SIXES = 6
+FULL_HOUSE = _full_house_score
+FOUR_OF_A_KIND = _four_of_a_kind_score
+LITTLE_STRAIGHT = _little_straight_score
+BIG_STRAIGHT = _big_straight_score
+CHOICE = _choice_score
+DEFAULT_SCORE = 0
