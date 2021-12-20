@@ -1,7 +1,6 @@
-
-python/making-the-grade/.vscode/settings.json
-python/making-the-grade/__pycache__/loops.cpython-39.pyc
-python/making-the-grade/__pycache__/loops_test.cpython-39-pytest-6.2.5.pyc
+python/*/*/*.json
+python/*/__pycache__
+python/*/*.pyc
 csharp/*/*.dll
 csharp/*/*/*.json
 csharp/*/*.cache
@@ -12,3 +11,6 @@ csharp/*/x64/
 csharp/*/[Bb]in/
 csharp/*/[Oo]bj/
 csharp/*/*.editorconfig
+python/*/.vscode/settings.json
+python/*/__pycache__/*.pyc
+
