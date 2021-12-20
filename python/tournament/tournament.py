@@ -11,11 +11,11 @@ HEADER = f'Team                           | {MP} |  {W} |  {D} |  {L} |  {P}'
 
 def format_result(team, team_dict):
     return (f'{team: <31}| '
-            f'{team_dict[team]["MP"]:>2} | '
-            f'{team_dict[team]["W"]: >2} | '
-            f'{team_dict[team]["D"]: >2} | '
-            f'{team_dict[team]["L"]: >2} | '
-            f'{team_dict[team]["P"]: >2}')
+            f'{team_dict[team][MP]:>2} | '
+            f'{team_dict[team][W]: >2} | '
+            f'{team_dict[team][D]: >2} | '
+            f'{team_dict[team][L]: >2} | '
+            f'{team_dict[team][P]: >2}')
 
 
 def tally(rows: list):
