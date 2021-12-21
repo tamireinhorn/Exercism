@@ -11,6 +11,6 @@ csharp/*/x64/
 csharp/*/[Bb]in/
 csharp/*/[Oo]bj/
 csharp/*/*.editorconfig
-python/*/.vscode/settings.json
-python/*/__pycache__/*.pyc
-
+python/*/.exercism
+python/*/.vscode
+python/*/__pycache__
