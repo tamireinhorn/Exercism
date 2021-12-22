@@ -67,30 +67,19 @@ def _choice_score(dice):
 
 
 def score(dice, category):
-    if category == YACHT:
-        return _yacht_score(dice)
-    if category < FULL_HOUSE:
-        return _singles_score(dice, category)
-    if category == FULL_HOUSE:
-        return _full_house_score(dice)
-    if category == FOUR_OF_A_KIND:
-        return _four_of_a_kind_score(dice)
-    if category == LITTLE_STRAIGHT:
-        return _little_straight_score(dice)
-    if category == BIG_STRAIGHT:
-        return _big_straight_score(dice)
-    if category == CHOICE:
-        return _choice_score(dice)
-    raise ValueError('There is no such category')
+    try:
+        return category(dice)
+    except:
+        raise ValueError('There is no such category')
 
 
 YACHT = _yacht_score
-ONES = 1
-TWOS = 2
-THREES = 3
-FOURS = 4
-FIVES = 5
-SIXES = 6
+ONES = lambda dice: _singles_score(dice, 1)
+TWOS = lambda dice: _singles_score(dice, 2)
+THREES = lambda dice: _singles_score(dice, 3)
+FOURS = lambda dice: _singles_score(dice, 4)
+FIVES = lambda dice: _singles_score(dice, 5)
+SIXES = lambda dice: _singles_score(dice, 6)
 FULL_HOUSE = _full_house_score
 FOUR_OF_A_KIND = _four_of_a_kind_score
 LITTLE_STRAIGHT = _little_straight_score
