@@ -10,25 +10,8 @@ those constants (ex. the constants in the os, subprocess and re modules).
 
 You can learn more here: https://en.wikipedia.org/wiki/Enumerated_type
 """
-
-
-# Score categories.
-# Change the values as you see fit.
 from collections import Counter
 
-YACHT = 0
-ONES = 1
-TWOS = 2
-THREES = 3
-FOURS = 4
-FIVES = 5
-SIXES = 6
-FULL_HOUSE = 7
-FOUR_OF_A_KIND = 8
-LITTLE_STRAIGHT = 9
-BIG_STRAIGHT = 10
-CHOICE = 11
-DEFAULT_SCORE = 0
 
 def _yacht_score(dice):
     if len(set(dice)) == 1:
@@ -39,7 +22,7 @@ def _yacht_score(dice):
 
 def _singles_score(dice, category):
     c = Counter(dice)
-    return category * c.get(category, 0) 
+    return category * c.get(category, 0)
 
 
 def _full_house_score(dice):
@@ -84,19 +67,22 @@ def _choice_score(dice):
 
 
 def score(dice, category):
-    if category == YACHT:
-        return _yacht_score(dice)
-    if category < FULL_HOUSE:
-        return _singles_score(dice, category)
-    if category == FULL_HOUSE:
-        return _full_house_score(dice)
-    if category == FOUR_OF_A_KIND:
-        return _four_of_a_kind_score(dice)
-    if category == LITTLE_STRAIGHT:
-        return _little_straight_score(dice)
-    if category == BIG_STRAIGHT:
-        return _big_straight_score(dice)
-    if category == CHOICE:
-        return _choice_score(dice)
-    raise ValueError('There is no such category')
-    
+    try:
+        return category(dice)
+    except:
+        raise ValueError('There is no such category')
+
+
+YACHT = _yacht_score
+ONES = lambda dice: _singles_score(dice, 1)
+TWOS = lambda dice: _singles_score(dice, 2)
+THREES = lambda dice: _singles_score(dice, 3)
+FOURS = lambda dice: _singles_score(dice, 4)
+FIVES = lambda dice: _singles_score(dice, 5)
+SIXES = lambda dice: _singles_score(dice, 6)
+FULL_HOUSE = _full_house_score
+FOUR_OF_A_KIND = _four_of_a_kind_score
+LITTLE_STRAIGHT = _little_straight_score
+BIG_STRAIGHT = _big_straight_score
+CHOICE = _choice_score
+DEFAULT_SCORE = 0
