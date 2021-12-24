@@ -18,10 +18,10 @@ public static class Bob
         if (isQuestion && isYell){
             return "Calm down, I know what I'm doing!";
             }
-        else if (isQuestion && !isYell){
+        else if (isQuestion){
             return "Sure.";
         }
-        else if(!isQuestion && isYell){
+        else if(isYell){
             return "Whoa, chill out!";
             
         }
