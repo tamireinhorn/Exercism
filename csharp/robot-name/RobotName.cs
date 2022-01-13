@@ -28,25 +28,25 @@ public class Robot
         return new string(randomText);
     }
     public Robot(){
-        Name = name;
+        name = AddName();
     }
     public string Name 
     {
         get{return name;}
-        set
-        { 
-        while(!existingNames.Add(name)){
+    }
+    //This method provides the name generation without repetition
+    private string AddName()
+    {
+        while(!existingNames.Add(name))
+        {
             var digitPart = RandomRobot.Next((int)Math.Pow(10.0, numberOfDigits - 1.0), (int)Math.Pow(10.0, numberOfDigits * 1.0)).ToString();
             name = GetRandomString(alpha, RandomRobot, numberOfLetters) + digitPart; 
         }
         existingNames.Add(name);
-        }
-
-
+        return name;
     }
-
     public void Reset()
     {
-        Name = name;
+        name = AddName();
     }
 }
