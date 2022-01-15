@@ -17,11 +17,18 @@ class Allergies:
 
 
     def list_of_allergies(self):
-        score = format(self.score, 'b')[::-1]
+        score = self.score # Convert the score to binary. 
+        mask = 1 #This mask starts as 0b1, which stands for eggs.
+        #The idea is if we do a bitwise AND (&) with a score of, for example, 3, which is 0b11.
+        #This will return 0b01, which would be True, that is, you are allergic to eggs.
         allergy_list = []
-        for character, allergen in zip(score, SCORE_ALLERGIES.items()):
-            if character == '1':
+        for allergen in SCORE_ALLERGIES.items():
+            if score < mask:
+                break 
+            if score & mask : #Bitwise AND can be done in ints!
                 allergy_list.append(allergen[1])
+            #Shift the bit on the mask to the left for the next allergen
+            mask <<= 1
         return allergy_list
 
 
