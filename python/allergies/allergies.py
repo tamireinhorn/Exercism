@@ -1,5 +1,5 @@
 ALLERGIES_SCORE = ['eggs', 'peanuts', 'shellfish', 'strawberries',
-'tomatoes', 'chocolate', 'pollen', 'cats']
+                   'tomatoes', 'chocolate', 'pollen', 'cats']
 
 class Allergies:
 
