@@ -5,7 +5,7 @@ class School:
     def __init__(self):
         self._roster = []
         self._added = []
-        self._grades = defaultdict(lambda: [])
+        self._grades = defaultdict(list)
 
     def add_student(self, name, grade):
         if name in self._roster:
@@ -20,8 +20,7 @@ class School:
         return self._added
 
     def roster(self):
-        self._roster = list(itertools.chain.from_iterable([self._grades[grade] for grade in sorted(self._grades)]))
-        return self._roster
+        return list(itertools.chain.from_iterable(self._grades[grade] for grade in sorted(self._grades)))
 
     def grade(self, grade_number):
-        return self._grades.get(grade_number, list())
+        return self._grades.get(grade_number, [])
