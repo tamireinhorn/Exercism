@@ -1,16 +1,13 @@
-from itertools import chain
 import itertools
-
+from collections import defaultdict
 
 class School:
     def __init__(self):
-        self._roster = list()
-        self._added = list()
-        self._grades = dict()
+        self._roster = []
+        self._added = []
+        self._grades = defaultdict(lambda: [])
 
     def add_student(self, name, grade):
-        if self._grades.get(grade, -1) == -1:
-            self._grades[grade]  = list()
         if name in self._roster:
             self._added.append(False)
         else:
@@ -23,7 +20,7 @@ class School:
         return self._added
 
     def roster(self):
-        self._roster = list(itertools.chain.from_iterable([item[1] for item in sorted(self._grades.items(), key = lambda item: item[0])]))
+        self._roster = list(itertools.chain.from_iterable([self._grades[grade] for grade in sorted(self._grades)]))
         return self._roster
 
     def grade(self, grade_number):
