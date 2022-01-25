@@ -10,11 +10,11 @@ class School:
     def add_student(self, name, grade):
         if name in self._roster:
             self._added.append(False)
-        else:
-            self._grades[grade].append(name)
-            self._grades[grade] = sorted(self._grades[grade])
-            self._added.append(True)
-            self._roster.append(name)
+            return 
+        self._grades[grade].append(name)
+        self._grades[grade] = sorted(self._grades[grade])
+        self._added.append(True)
+        self._roster.append(name)
 
     def added(self):
         return self._added
