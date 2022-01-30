@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections.ObjectModel;
+
 public static class RomanNumeralExtension
 {
     public const char One = 'I';
@@ -17,21 +17,13 @@ public static class RomanNumeralExtension
 
     public const char Thousand = 'M';
 
-    public static readonly Tuple<char, char, char> First = new Tuple<char, char, char>(One,Five, Ten);
+    public static readonly (char, char, char) First = (One,Five, Ten);
 
-    public static readonly Tuple<char, char, char> Second = new Tuple<char, char, char>(Ten, Fifty, Hundred);
-
-    public static readonly Tuple<char, char, char> Third = new Tuple<char, char, char>(Hundred, FiveHundred, Thousand);
-    private static readonly Tuple<char, char, char> tuple = new Tuple<char, char, char>(Thousand, Thousand, Thousand);
-    public static readonly List<Tuple<char, char, char>> t =  new List<Tuple<char, char, char>> {tuple, Third, Second, First};
+    public static readonly (char, char, char) Second = (Ten, Fifty, Hundred);
+    public static readonly (char, char, char) Third = (Hundred, FiveHundred, Thousand);
+    private static readonly (char, char, char) tuple = (Thousand, Thousand, Thousand);
+    public static readonly List<(char, char, char)> t =  new List<(char, char, char)> {tuple, Third, Second, First};
     
-
-    public static string Reverse(this string s )
-    {
-        char[] charArray = s.ToCharArray();
-        Array.Reverse( charArray );
-        return new string( charArray );
-    }
 
     public static string Pad(this string s, int desiredLength)
     {
@@ -46,35 +38,20 @@ public static class RomanNumeralExtension
     public static string ToRoman(this int value)
     {
 
-        //Stringify the number, reverse it then pad it to look like a thousands:
+        //Stringify the number then pad it to look like a thousands:
         string number = value.ToString().Pad(4);
         var zipped = Enumerable.Zip(number, t);
         var answer = "";
         foreach (var item in zipped)
         {
             int digit = (int)char.GetNumericValue(item.First);
-            Tuple<char, char, char> possibilities = item.Second;
-            if(digit == 0)
-            {
-                continue;
-            }
-            if(digit <= 3)
-            { 
-                answer += new string(possibilities.Item1, digit);
-            }
-            else if(digit <= 5)
-            {
-
-                answer += new string(possibilities.Item1, 5 - digit) + new string(possibilities.Item2,1);
-            }
-            else if(digit <= 8)
-            {
-
-                answer += new string(possibilities.Item2,1) +  new string(possibilities.Item1, digit - 5) ;
-            }
-            else 
-            {
-               answer += new string(possibilities.Item1, 1) + new string(possibilities.Item3,1);
+            (char, char, char) possibilities = item.Second;
+            switch(digit){
+                case 0: continue;
+                case <= 3:  answer += new string(possibilities.Item1, digit); break;
+                case <= 5:  answer += new string(possibilities.Item1, 5 - digit) + new string(possibilities.Item2,1); break;
+                case <= 8:  answer += new string(possibilities.Item2,1) +  new string(possibilities.Item1, digit - 5) ; break;
+                default: answer += new string(possibilities.Item1, 1) + new string(possibilities.Item3,1); break;
             }
         }
         return answer;
