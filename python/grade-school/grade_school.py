@@ -12,15 +12,14 @@ class School:
             self._added.append(False)
             return 
         self._grades[grade].append(name)
-        self._grades[grade] = sorted(self._grades[grade])
         self._added.append(True)
         self._roster.append(name)
-
+        
     def added(self):
         return self._added
 
     def roster(self):
-        return list(itertools.chain.from_iterable(self._grades[grade] for grade in sorted(self._grades)))
+        return list(itertools.chain.from_iterable(sorted(self._grades[grade]) for grade in sorted(self._grades)))
 
     def grade(self, grade_number):
-        return self._grades.get(grade_number, [])
+        return sorted(self._grades.get(grade_number, []))
