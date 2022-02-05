@@ -10,24 +10,14 @@ those constants (ex. the constants in the os, subprocess and re modules).
 
 You can learn more here: https://en.wikipedia.org/wiki/Enumerated_type
 """
-from copy import copy
-from collections import Counter
+
 # Possible sublist categories.
 # Change the values as you see fit.
-SUBLIST = -1
-SUPERLIST = 1
-EQUAL = 0
-UNEQUAL = -2
+SUBLIST = None
+SUPERLIST = None
+EQUAL = None
+UNEQUAL = None
 
 
 def sublist(list_one, list_two):
-    if len(list_one) > len(list_two):
-        big_list = list_one
-        small_list = list_two
-    else:
-        big_list = list_two
-        small_list = list_one
-    big_list_counter = Counter(big_list)
-    small_list_counter = Counter(small_list)
-    print('2')
-            
+    pass
