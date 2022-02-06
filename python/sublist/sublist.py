@@ -1,23 +1,38 @@
-"""
-This exercise stub and the test suite contain several enumerated constants.
+from enum import Enum, unique
+@unique
+class ListTypes(Enum):
+    SUBLIST = 0
+    SUPERLIST = 1
+    EQUAL = 2
+    UNEQUAL = 3
 
-Since Python 2 does not have the enum module, the idiomatic way to write
-enumerated constants has traditionally been a NAME assigned to an arbitrary,
-but unique value. An integer is traditionally used because it’s memory
-efficient.
-It is a common practice to export both constants and functions that work with
-those constants (ex. the constants in the os, subprocess and re modules).
+SUBLIST = ListTypes.SUBLIST
+SUPERLIST = ListTypes.SUPERLIST
+EQUAL = ListTypes.EQUAL
+UNEQUAL = ListTypes.UNEQUAL
 
-You can learn more here: https://en.wikipedia.org/wiki/Enumerated_type
-"""
 
-# Possible sublist categories.
-# Change the values as you see fit.
-SUBLIST = None
-SUPERLIST = None
-EQUAL = None
-UNEQUAL = None
+def list_containment(list_one, list_two):
+    if len(list_two) > len(list_one):
+        small_list = list_one
+        big_list = list_two
+        success = SUBLIST
+    else:
+        small_list = list_two
+        big_list = list_one
+        success = SUPERLIST
+    small_list_size = len(small_list)
+    big_list_size = len(big_list)
+    for pointer in range(big_list_size - small_list_size + 1):
+        chunk = big_list[pointer:(pointer + small_list_size)]
+        if chunk == small_list:
+            return success
+    return UNEQUAL
 
 
 def sublist(list_one, list_two):
-    pass
+    # Test for equality:
+    if list_one == list_two:
+        return EQUAL
+    return list_containment(list_one, list_two)
+    
