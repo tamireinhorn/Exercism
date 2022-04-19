@@ -92,9 +92,10 @@ class LinkedList:
         # Well, the tail must reference the node before it as the next.
         # And so on and so forth. So you need to have two pointers moving about like this
         # OBS: This could be done with __iter but wouldn't help me to learn the concepts.
-        h = self.__head # Save the current head node. This will be the tail later on.
-        if self.__head: # We can only reverse if it's not empty. 
-            current_node = self.__head # Start with a pointer in the first node, the head.
+        reversed_list = copy(self) # We don't want to modify the object.
+        h = reversed_list.__head # Save the current head node. This will be the tail later on.
+        if reversed_list.__head: # We can only reverse if it's not empty. 
+            current_node = reversed_list.__head # Start with a pointer in the first node, the head.
             next_guy = current_node.next() # Get a second pointer for the sucessor.
             current_node._next_node = None # To avoid a loop, the head node must lose its edge to the next node.
             while next_guy: # This only runs while next_guy is a node. This is because we are always looking at the node i and its sucessor.
@@ -104,9 +105,9 @@ class LinkedList:
                 next_guy._next_node = current_node # Now, we invert part of the list, pointing node i + 1 to node i instead. 
                 current_node = next_guy # Now we just walk ahead to the next iteration. 
                 next_guy = temp 
-            self.__tail = h # After looping, our previous head is now our tail (which ensures no cycles)
-            self.__head = current_node # The last node we worked with is the last one on the original list (and thus the first one for reverse)
-        return self 
+            reversed_list.__tail = h # After looping, our previous head is now our tail (which ensures no cycles)
+            reversed_list.__head = current_node # The last node we worked with is the last one on the original list (and thus the first one for reverse)
+        return reversed_list 
 
 class EmptyListException(Exception):
     def __init__(self, message):
