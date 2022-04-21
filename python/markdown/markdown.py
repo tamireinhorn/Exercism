@@ -1,5 +1,38 @@
 import re
 
+def header_parsing(line):
+    m = re.match('#{1,6} ', line) # A header is composed of 1 to 6 #s and a space.
+    if m:
+        size = m.end() -1 # We remove the space's position.
+        line = f'<h{size}>{line[(size+1):]}</h{size}>' # This is the pattern of the header.
+    return line
+
+
+def add_paragraph(line):
+    # This verifies for any of the possible tags. If they aren't there, you add the paragraph marker.
+    m = re.match('<h|<ul|<p|<li', line)
+    if not m:
+        line = f"<p>{line}</p>"
+    return line
+
+# These must be two functions because you CAN have both bold and italics. 
+def parse_bold(line):
+    m = re.match('(.*)__(.*)__(.*)', line) # Look for bold
+    if m:
+        line = f"{m.group(1)}<strong>{m.group(2)}</strong>{m.group(3)}" # parse bold
+    return line
+
+
+def parse_italic(line):
+    m = re.match('(.*)_(.*)_(.*)', line) # Look for italics.
+    if m:
+        line = f"{m.group(1)}<em>{m.group(2)}</em>{m.group(3)}" # parse italics.
+    return line 
+
+
+def parse_bold_italics(line):
+    return parse_italic(parse_bold(line))
+
 
 def parse(markdown):
     lines = markdown.split('\n')
@@ -7,67 +40,21 @@ def parse(markdown):
     in_list = False
     in_list_append = False
     for i in lines:
-        if re.match('###### (.*)', i):   #This is n asterisks, and then the line below is n+1 with h n... So I think this is easier to generalize
-            i = '<h6>' + i[7:] + '</h6>'
-        elif re.match('##### (.*)', i):
-            i = '<h5>' + i[6:] + '</h5>'
-        elif re.match('#### (.*)', i):
-            i = '<h4>' + i[5:] + '</h4>'
-        elif re.match('### (.*)', i):
-            i = '<h3>' + i[4:] + '</h3>'
-        elif re.match('## (.*)', i):
-            i = '<h2>' + i[3:] + '</h2>'
-        elif re.match('# (.*)', i):
-            i = '<h1>' + i[2:] + '</h1>'
-        m = re.match(r'\* (.*)', i)
-        if m:
+        i = header_parsing(i)
+        m = re.match(r'\* (.*)', i) # Here we match for an *, which indicates a list
+        if m: # If you have a list
+            curr = m.group(1) # This gets whatever comes after the list signaling
+            curr = parse_bold_italics(curr)
+            i = f"<li>{curr}</li>" # Anything inside a list gets the list item tag.
             if not in_list:
-                in_list = True
-                is_bold = False
-                is_italic = False
-                curr = m.group(1)
-                m1 = re.match('(.*)__(.*)__(.*)', curr)
-                if m1:
-                    curr = m1.group(1) + '<strong>' + \
-                        m1.group(2) + '</strong>' + m1.group(3)
-                    is_bold = True
-                m1 = re.match('(.*)_(.*)_(.*)', curr)
-                if m1:
-                    curr = m1.group(1) + '<em>' + m1.group(2) + \
-                        '</em>' + m1.group(3)
-                    is_italic = True
-                i = '<ul><li>' + curr + '</li>'
-            else:
-                is_bold = False
-                is_italic = False
-                curr = m.group(1)
-                m1 = re.match('(.*)__(.*)__(.*)', curr)
-                if m1:
-                    is_bold = True
-                m1 = re.match('(.*)_(.*)_(.*)', curr)
-                if m1:
-                    is_italic = True
-                if is_bold:
-                    curr = m1.group(1) + '<strong>' + \
-                        m1.group(2) + '</strong>' + m1.group(3)
-                if is_italic:
-                    curr = m1.group(1) + '<em>' + m1.group(2) + \
-                        '</em>' + m1.group(3)
-                i = '<li>' + curr + '</li>'
-        else:
-            if in_list:
+                in_list = True # We mark that we are now inside of a list
+                i = f"<ul>{i}" # The first part of the list will put an <ul> in the beggining of the list.
+        else: # If we don't match for a list
+            if in_list: # If we WERE inside a list
                 in_list_append = True
-                in_list = False
-
-        m = re.match('<h|<ul|<p|<li', i)
-        if not m:
-            i = '<p>' + i + '</p>'
-        m = re.match('(.*)__(.*)__(.*)', i)
-        if m:
-            i = m.group(1) + '<strong>' + m.group(2) + '</strong>' + m.group(3)
-        m = re.match('(.*)_(.*)_(.*)', i)
-        if m:
-            i = m.group(1) + '<em>' + m.group(2) + '</em>' + m.group(3)
+                in_list = False # Now we are out, because we've seen its end in another line. 
+        i = add_paragraph(i)
+        i = parse_bold_italics(i)
         if in_list_append:
             i = '</ul>' + i
             in_list_append = False
