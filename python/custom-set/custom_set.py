@@ -1,6 +1,6 @@
 from copy import copy
 
-from black import diff 
+
 class CustomSet:
     def __init__(self, elements=[]):
         self.__dict = {}
