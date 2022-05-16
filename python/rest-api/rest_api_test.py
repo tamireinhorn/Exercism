@@ -1,5 +1,7 @@
 import unittest
 
+import pytest
+
 from rest_api import (
     RestAPI,
 ) 
@@ -20,10 +22,20 @@ class RestApiTest(unittest.TestCase):
     def test_add_user(self):
         database = {"users": []}
         api = RestAPI(database)
+        
         payload = json.dumps({"user": "Adam"})
         response = api.post("/add", payload)
         expected = {"name": "Adam", "owes": {}, "owed_by": {}, "balance": 0.0}
         self.assertDictEqual(json.loads(response), expected)
+    
+    def test_add_other(self):
+        database = {"users": []}
+        api = RestAPI(database)
+        payload = '{"user": "bob"}'
+        response = api.post("/add", payload)
+        expected =  {"name": "bob", "owes": {}, "owed_by": {}, "balance": 0.0}        
+        self.assertDictEqual(json.loads(response), expected)
+
 
     def test_get_single_user(self):
         database = {
@@ -160,6 +172,16 @@ class RestApiTest(unittest.TestCase):
         }
         self.assertDictEqual(json.loads(response), expected)
 
-
+    def test_invalid_get(self):
+        database = {
+            "users": [
+                {"name": "Adam", "owes": {"Bob": 3.0}, "owed_by": {}, "balance": -3.0},
+                {"name": "Bob", "owes": {}, "owed_by": {"Adam": 3.0}, "balance": 3.0},
+            ]
+        }
+        api = RestAPI(database)
+        url = '/foo'
+        with pytest.raises(ValueError):
+            api.get(url)
 if __name__ == "__main__":
     unittest.main()
