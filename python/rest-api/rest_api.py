@@ -11,15 +11,16 @@ def get_keys(dict: dict):
 
 class RestAPI:
     def __init__(self, database: dict =None):
-        
-        for entry in database['users']:
-            possible_users = set(get_keys(entry.get('owes')) + get_keys(entry.get('owed_by'))) # This gets all unique users in that entry!
-            for user in possible_users:
-                user_amount = entry.get('owes').get(user, 0) - entry.get('owed_by').get(user, 0) # We aggregate the debt of that user in the entry in one dict.
-                entry['owes'][user] = user_amount # We redo the owes dictionary
-                del entry['owed_by'] # We remove the unnecessary dictionary.
+        database_copy = copy(database)
+        if database_copy:
+            for entry in database_copy['users']:
+                possible_users = set(get_keys(entry.get('owes')) + get_keys(entry.get('owed_by'))) # This gets all unique users in that entry!
+                for user in possible_users:
+                    user_amount = entry.get('owes').get(user, 0) - entry.get('owed_by').get(user, 0) # We aggregate the debt of that user in the entry in one dict.
+                    entry['owes'][user] = user_amount # We redo the owes dictionary
+                    del entry['owed_by'] # We remove the unnecessary dictionary.
         self.valid_gets = ['users']
-        self.database = database 
+        self.database = database_copy 
 
     def get(self, url: str, payload: str = None):
         clean_url = _clean_url(url)
@@ -42,7 +43,7 @@ class RestAPI:
             return self.__add_iou(payload)
         raise ValueError('Incorrect request passed to API. Valid POST methods are add, iou.')
             
-    def __get_user(self, user_name) -> str:
+    def __get_user(self, user_name: str) -> str:
         return [user for user in self.database['users'] if user['name'] == user_name][0]
 
     def __add_user(self, payload: str) -> str:
